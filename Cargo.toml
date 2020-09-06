@@ -1,0 +1,22 @@
+[package]
+name = "hsrsh"
+version = "0.1.0"
+authors = [""]
+edition = "2018"
+
+[profile.release]
+# Optimize for size.
+opt-level = 'z'
+lto = true
+codegen-units = 1
+panic = 'abort'
+
+[dependencies]
+# Bind Tor support into our application without it needing to be installed
+libtor = "43.6.0+0.4.3.6"
+
+# Gag is used to suppress output on unix systems
+gag = "0.1.10"
+
+# Used to stream network data over Tor
+tor-stream = "0.2.0"
