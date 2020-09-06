@@ -27,7 +27,7 @@ $ cargo build --release
   Once Tor is bootstrapped you can get the onion address from the hidden service directory
 
   ```
-  $ cat /var/lib/tor/hidden_service/
+  $ cat /var/lib/tor/hidden_service/hostname
   changeme.onion
   ```
 
