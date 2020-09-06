@@ -33,7 +33,7 @@ $ cargo build --release
 2. Start listener on the hidden service using ```ncat```. MAKE SURE TO ONLY ALLOW LOCALHOST CONNECTIONS
 
   ```
-    user@localhost:~$ ncat --allow 127.0.0.1 -nvl 127.0.0.1 -p 1337
+    user@localhost:~$ ncat --allow 127.0.0.1 -nvlp 1337
     Ncat: Listening on 0.0.0.0:1337
   ```
 
