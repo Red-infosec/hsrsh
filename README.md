@@ -3,7 +3,7 @@
 Hidden Service Reverse Shell, aka HSRSH
 
 This was a quickly written tool for demonstrating a reverse shell over a hidden service all in
-one binary and an excuse to play with Rust and solely for educational purposes.
+one binary and an excuse to play with Rust. Solely for educational purposes.
 
 1. Configure your hidden service on server you will be accepting the shell connection on. Add this to your torrc
 
