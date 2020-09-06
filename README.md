@@ -39,9 +39,9 @@ one binary and an excuse to play with Rust. Solely for educational purposes.
   ```
 
 To do:
-    - support tls
-    - windows support
-    - Better / more Rust-like error handling
+  - support tls
+  - windows support
+  - Better / more Rust-like error handling
 
 Things that I read that helped me out a lot with this:
 - https://github.com/isdrupter/onionslicer
